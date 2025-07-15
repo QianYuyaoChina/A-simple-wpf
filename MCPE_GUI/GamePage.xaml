@@ -1,0 +1,243 @@
+﻿<Page x:Class="MCPE_GUI.GamePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MCPE_GUI"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" 
+      d:DesignWidth="900"
+      Title="账户管理"
+      Background="White">
+
+    <!-- 资源字典 -->
+    <Page.Resources>
+        <!-- 列标题样式 -->
+        <Style x:Key="DataGridColumnHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#F5F5F5"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#333"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+
+        <!-- 单元格文本样式 -->
+        <Style x:Key="DataGridTextCellStyle" TargetType="TextBlock">
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="#333"/>
+        </Style>
+
+        <!-- 行样式（整合了当前账户样式） -->
+        <Style x:Key="AccountRowStyle" TargetType="DataGridRow">
+            <Setter Property="Background" Value="{Binding RowBackground}"/>
+            <Setter Property="BorderBrush" Value="#F0F0F0"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="MinHeight" Value="40"/>
+            <Style.Triggers>
+                <!-- 当前账户特殊样式 -->
+                <DataTrigger Binding="{Binding IsCurrentAccount}" Value="True">
+                    <Setter Property="BorderBrush" Value="#1890FF"/>
+                    <Setter Property="BorderThickness" Value="1"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- 圆角按钮样式 -->
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#1890FF"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="4"
+                                BorderThickness="0">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- 操作按钮样式 -->
+        <Style x:Key="LoginButtonStyle" TargetType="Button" BasedOn="{StaticResource RoundedButtonStyle}">
+            <Setter Property="Background" Value="#1890FF"/>
+        </Style>
+
+        <Style x:Key="SetCurrentButtonStyle" TargetType="Button" BasedOn="{StaticResource RoundedButtonStyle}">
+            <Setter Property="Background" Value="#722ED1"/>
+        </Style>
+
+        <Style x:Key="AddButtonStyle" TargetType="Button" BasedOn="{StaticResource RoundedButtonStyle}">
+            <Setter Property="Background" Value="#1890FF"/>
+        </Style>
+
+        <Style x:Key="EditButtonStyle" TargetType="Button" BasedOn="{StaticResource RoundedButtonStyle}">
+            <Setter Property="Background" Value="#52C41A"/>
+        </Style>
+
+        <Style x:Key="DeleteButtonStyle" TargetType="Button" BasedOn="{StaticResource RoundedButtonStyle}">
+            <Setter Property="Background" Value="#F5222D"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 标题区域 -->
+        <Border Grid.Row="0" 
+                Background="#1890FF" 
+                CornerRadius="5,5,0,0"
+                Padding="15">
+            <Grid>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Icons/game_large.png" 
+                           Width="32" 
+                           Height="32" 
+                           Margin="0,0,10,0"/>
+                    <TextBlock Text="游戏中心" 
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="White"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- 账户表格区域 -->
+        <Border Grid.Row="1" 
+                Background="White"
+                BorderBrush="#E0E0E0"
+                BorderThickness="1"
+                CornerRadius="0,0,0,5">
+            <DataGrid x:Name="GamesGrid"
+                      IsReadOnly="True"
+                      ItemsSource="{Binding Games}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      CanUserReorderColumns="False"
+                      CanUserResizeRows="False"
+                      CanUserSortColumns="True"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow"
+                      GridLinesVisibility="Horizontal"
+                      HeadersVisibility="Column"
+                      HorizontalGridLinesBrush="#F0F0F0"
+                      BorderThickness="0"
+                      RowStyle="{StaticResource AccountRowStyle}"
+                      SelectionChanged="GamesGrid_SelectionChanged">
+
+                <DataGrid.Columns>
+                    <!-- 服务器名列 -->
+                    <DataGridTextColumn Header="服务器名" 
+                                        Binding="{Binding Gamename}"
+                                        Width="*"
+                                        HeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                                        ElementStyle="{StaticResource DataGridTextCellStyle}"/>
+
+                    <!-- 服务器ID列 -->
+                    <DataGridTextColumn Header="ID" 
+                                        Binding="{Binding Id}"
+                                        Width="*"
+                                        HeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                                        ElementStyle="{StaticResource DataGridTextCellStyle}"/>
+
+                    <!-- 状态列 -->
+                    <DataGridTextColumn Header="人数"
+                                        Binding="{Binding Count}"
+                                        Width="*"
+                                        HeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                                        ElementStyle="{StaticResource DataGridTextCellStyle}"/>
+
+                    <!-- 操作列 -->
+                    <DataGridTemplateColumn Header="操作" 
+                                            Width="180"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <!-- 加入 -->
+                                    <Button Content="加入服务器" 
+                                            Click="LoginButton_Click"
+                                            Tag="{Binding}"
+                                            Margin="0,0,5,0">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource LoginButtonStyle}">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+
+                <!-- 表头样式 -->
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="#F5F5F5"/>
+                        <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        <Setter Property="Padding" Value="10"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="Foreground" Value="#333"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+            </DataGrid>
+        </Border>
+
+        <!-- 操作按钮区域 -->
+        <Border Grid.Row="2" 
+                Background="White"
+                BorderBrush="#E0E0E0"
+                BorderThickness="1"
+                CornerRadius="0,0,5,5"
+                Padding="10">
+            <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Right">
+                <Button Content="添加服务器" 
+                        Style="{StaticResource AddButtonStyle}"
+                        MinWidth="100"
+                        Margin="0,0,10,0"
+                        Click="AddGame_Click"/>
+
+                <Button Content="编辑服务器" 
+                        Style="{StaticResource EditButtonStyle}"
+                        MinWidth="100"
+                        Margin="0,0,10,0"
+                        x:Name="EditGameBtn"
+                        IsEnabled="False"
+                        Click="EditGame_Click"/>
+
+                <Button Content="删除服务器" 
+                        Style="{StaticResource DeleteButtonStyle}"
+                        MinWidth="100"
+                        Margin="0,0,10,0"
+                        x:Name="DeleteGameBtn"
+                        IsEnabled="False"
+                        Click="DeleteGame_Click"/>
+                <Button Content="直接连接" 
+                Style="{StaticResource AddButtonStyle}"
+                MinWidth="100"
+                Margin="0,0,10,0"
+                x:Name="DirectlyConn"
+                IsEnabled="True"
+                Click="DirectlyConn_Click"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>

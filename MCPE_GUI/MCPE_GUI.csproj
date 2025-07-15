@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Icons\account.png" />
+    <None Remove="Icons\account_large.png" />
+    <None Remove="Icons\charge.png" />
+    <None Remove="Icons\friend.png" />
+    <None Remove="Icons\friend_large.png" />
+    <None Remove="Icons\game.png" />
+    <None Remove="Icons\game_large.png" />
+    <None Remove="Icons\settings.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Icons\account.png" />
+    <Resource Include="Icons\account_large.png" />
+    <Resource Include="Icons\charge.png" />
+    <Resource Include="Icons\friend.png" />
+    <Resource Include="Icons\friend_large.png" />
+    <Resource Include="Icons\game.png" />
+    <Resource Include="Icons\game_large.png" />
+    <Resource Include="Icons\settings.png" />
+  </ItemGroup>
+
+</Project>
